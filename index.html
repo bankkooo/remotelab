@@ -1,32 +1,42 @@
-<html>  
-<head></head>  
-<title>Send command to mqtt</title>  
-<body bgcolor="#6699ff">  
-    <form name="frmMain" method="post" action="websocketsmqtt.php" target="iframe_target">
-        <iframe id="iframe_target" name="iframe_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe>
-        <!--First Name : <input type="text" name="txtFirstName"><br>-->
-        <!--Last Name : <input type="text" name="txtLastName"><br>-->
-        
-        <h3>         Command List :</h3>
-        <!--<select name="cmd" id="cmd">  
-        <option value="ledOn">Turn on LED</option>}  
-        <option value="ledOff">Turn off LED</option>  
-        <option value="beep">Beep!!!</option>  
-        <option value="motorOn">Turn on motor</option>  
-        <option value="motorOff">Turn off motor</option>  
-        <option value="motorRD">motorRD</option>  
-        <option value="motorCW">motorCW</option>  
-        <option value="motorCCW">motorCCW</option>  
-        <option value="talkToMotor">talkToMotor</option> 
-        <input name="btnSubmit" type="submit" value="Submit">-->
-        <p><input type="submit" value="beep" name="btncmd"/></p>
+<script src="./mqttws31.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>-->
+<script>
+client = new Paho.MQTT.Client("broker.mqttdashboard.com", Number(8000), "clientIdbank");
+client = new Paho.MQTT.Client("35.198.231.150", 9001,"AAA9999");
+//client = new Paho.MQTT.Client("soldier.cloudmqtt.com", 30420,"bank89899");
+//client = new Paho.MQTT.Client("soldier.cloudmqtt.com", /*30420*/34222,"789");
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
 
-        <input type="submit" value="ledOn" name="btncmd"/>
-        <input type="submit" value="ledOff" name="btncmd"/>
-    </form> 
-    <form action="Websocketsmqtt.php" method="post">
-        <input type="button" name="submit" value="Submit">
-    </form>
-</select>   
-</body>  
-<html> 
+//client.connect({onSuccess:onConnect});
+var options = {
+  useSSL: true,
+  /*userName: "vpfewsse",
+  password: "gNAs763mxcGN",*/
+  userName: "obpkkwdc",
+  password: "1lUnSF15XpWM",
+  onSuccess:onConnect
+}
+
+  // connect the client
+client.connect(options);
+
+function onConnect() {
+  console.log("onConnect");
+  client.subscribe("remotelab/Lab2");
+  //message = new Paho.MQTT.Message("Hello GoGo I'm mqtt message");
+  //message.destinationName = "testGogo/MQTT";
+  //client.send(message);
+}
+
+function onConnectionLost(responseObject) {
+  if (responseObject.errorCode !== 0) {
+    console.log("onConnectionLost:"+responseObject.errorMessage);
+  }
+}
+
+function onMessageArrived(message) {
+  console.log("onMessageArrived:"+message.payloadString);
+  //document.getElementById("demo").innerHTML = message.payloadString;
+}
+</script>

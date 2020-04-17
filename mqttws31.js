@@ -975,7 +975,7 @@ Paho.MQTT = (function (global) {
 			wsurl = uriParts.join(":");
 		}
 		this.connected = false;
-		console.log(wsurl)
+		console.log(wsurl+"here")
 		if (this.connectOptions.mqttVersion < 4) {
 			this.socket = new WebSocket(wsurl, ["mqttv3.1"]);
 		} else {
@@ -1151,7 +1151,7 @@ Paho.MQTT = (function (global) {
 		this.receivePinger.reset();
 		var messages = this._deframeMessages(event.data);
 		for (var i = 0; i < messages.length; i+=1) {
-		    this._handleMessage(messages[i]);
+			this._handleMessage(messages[i]);
 		}
 	}
 
@@ -1165,12 +1165,14 @@ Paho.MQTT = (function (global) {
 	        delete this.receiveBuffer;
 	    }
 		try {
+			//console.log('Hi1');
 		    var offset = 0;
 		    var messages = [];
 		    while(offset < byteArray.length) {
 		        var result = decodeMessage(byteArray,offset);
 		        var wireMessage = result[0];
-		        offset = result[1];
+				offset = result[1];
+				//console.log('Hi2');
 		        if (wireMessage !== null) {
 		            messages.push(wireMessage);
 		        } else {
@@ -1178,9 +1180,11 @@ Paho.MQTT = (function (global) {
 		        }
 		    }
 		    if (offset < byteArray.length) {
+				//console.log('Hi3');
 		    	this.receiveBuffer = byteArray.subarray(offset);
 		    }
 		} catch (error) {
+			//console.log('Hi4');
 			this._disconnected(ERROR.INTERNAL_ERROR.code , format(ERROR.INTERNAL_ERROR, [error.message,error.stack.toString()]));
 			return;
 		}
